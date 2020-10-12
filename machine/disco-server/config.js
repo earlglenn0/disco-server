@@ -1,7 +1,8 @@
 const { assign } = require('xstate')
 const context = {
-    state: undefined,
-};
+    clicks: 0,
+    max_clicks: 20
+}
 
 const config = {
     id: 'disco',
@@ -9,147 +10,172 @@ const config = {
     context,
     states: {
         off: {
-            invoke: {
-                id: 'isOff',
-                src: 'isOff'
-            },
             on: {
-                TURN_ON: 'on',
-                BREAK: 'broken'
+                TURN_ON: [{
+                    target: '#broken',
+                    cond: 'hasReachedLimit'
+                },
+                {
+                    target: 'on',
+                    actions: assign({ clicks: context => context.clicks + 1 })
+                }]
             }
         },
         on: {
             type: 'parallel',
-            invoke: {
-                id: 'isOn',
-                src: 'isOn'
-            },
             on: {
-                BREAK: 'broken'
+                TURN_OFF: [{
+                    target: '#broken',
+                    cond: 'hasReachedLimit'
+                },
+                {
+                    actions: assign({ clicks: context => context.clicks + 1 }),
+                    target: 'off'
+                }]
             },
             states: {
                 color: {
                     initial: 'steady',
                     states: {
                         steady: {
-                            invoke: {
-                                id: 'setColorToSteady',
-                                src: 'setColorToSteady'
-                            },
                             on: {
-                                SET_COLOR_TO_CHANGING: {
+                                SET_COLOR_TO_CHANGING: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
+                                },
+                                {
                                     target: 'changing',
-                                    actions: assign({ color: 'changing' })
+                                    actions: assign({ clicks: context => context.clicks + 1 }),
                                 }
+                                ],
                             }
                         },
                         changing: {
-                            invoke: {
-                                id: 'setColorToChanging',
-                                src: 'setColorToChanging'
-                            },
                             on: {
-                                SET_COLOR_TO_STEADY: {
+                                SET_COLOR_TO_STEADY: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
+                                },
+                                {
                                     target: 'steady',
-                                    actions: assign({ color: 'steady' })
-                                }
+                                    actions: assign({ clicks: context => context.clicks + 1 }),
+                                }]
                             }
                         }
                     }
                 },
                 speed: {
+                    invoke: {
+                        id: 'setSpeed',
+                        src: 'setSpeed'
+                    },
                     initial: 'low',
                     states: {
                         low: {
-                            invoke: {
-                                id: 'setSpeedToLow',
-                                src: 'setSpeedToLow'
-                            },
                             on: {
-                                SET_SPEED_TO_MED: {
-                                    target: 'med',
-                                    actions: assign({ speed: 'med' })
+                                SET_SPEED_TO_MEDIUM: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
                                 },
-                                SET_SPEED_TO_HIGH: {
-                                    target: 'high',
-                                    actions: assign({ speed: 'high' })
+                                {
+                                    target: 'medium',
+                                    actions: assign({ clicks: context => context.clicks + 1 }),
                                 }
+                                ],
+                                SET_SPEED_TO_HIGH: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
+                                },
+                                {
+                                    target: 'high',
+                                    actions: assign({ clicks: context => context.clicks + 1 }),
+                                }
+                                ]
                             }
                         },
-                        med: {
-                            invoke: {
-                                id: 'setSpeedToMed',
-                                src: 'setSpeedToMed'
-                            },
+                        medium: {
                             on: {
-                                SET_SPEED_TO_LOW: {
-                                    target: 'low',
-                                    actions: assign({ speed: 'low' })
+                                SET_SPEED_TO_LOW: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
                                 },
-                                SET_SPEED_TO_HIGH: {
+                                {
+                                    target: 'low',
+                                    actions: assign({ clicks: context => context.clicks + 1 })
+                                }],
+                                SET_SPEED_TO_HIGH: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
+                                },
+                                {
                                     target: 'high',
-                                    actions: assign({ speed: 'high' })
-                                }
+                                    actions: assign({ clicks: context => context.clicks + 1 }),
+                                }]
                             }
                         },
                         high: {
-                            invoke: {
-                                id: 'setSpeedToHigh',
-                                src: 'setSpeedToHigh'
-                            },
                             on: {
-                                SET_SPEED_TO_LOW: {
-                                    target: 'low',
-                                    actions: assign({ speed: 'low' })
+                                SET_SPEED_TO_LOW: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
                                 },
-                                SET_SPEED_TO_MED: {
-                                    target: 'med',
-                                    actions: assign({ speed: 'med' })
-                                }
+                                {
+                                    target: 'low',
+                                    actions: assign({ clicks: context => context.clicks + 1 }),
+                                }],
+                                SET_SPEED_TO_MEDIUM: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
+
+                                },
+                                {
+                                    target: 'medium',
+                                    actions: assign({ clicks: context => context.clicks + 1 })
+                                }]
                             }
                         }
                     }
                 },
                 lightMode: {
-                    initial: 'flashing',
+                    initial: 'steady',
                     states: {
-                        flashing: {
-                            invoke: {
-                                id: 'setLightModeToFlashing',
-                                src: 'setLightModeToFlashing'
-                            },
+                        steady: {
                             on: {
-                                SET_LIGHTMODE_TO_STEADY: {
-                                    target: 'steady',
-                                    actions: assign({ lightMode: 'steady' })
+                                SET_LIGHTMODE_TO_FLASHING: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
+
+                                },
+                                {
+                                    target: 'flashing',
+                                    actions: assign({ clicks: context => context.clicks + 1 })
                                 }
+                                ],
                             }
                         },
-                        steady: {
-                            invoke: {
-                                id: 'setLightModeToSteady',
-                                src: 'setLightModeToSteady'
-                            },
+                        flashing: {
+
                             on: {
-                                SET_LIGHTMODE_TO_FLASHING: {
-                                    target: 'flashing',
-                                    actions: assign({ lightMode: 'flashing' })
+                                SET_LIGHTMODE_TO_STEADY: [{
+                                    target: '#broken',
+                                    cond: 'hasReachedLimit',
+
+                                },
+                                {
+                                    target: 'steady',
+                                    actions: assign({ clicks: context => context.clicks + 1 }),
                                 }
+                                ],
                             }
-                        }
+                        },
                     }
                 }
             }
         },
 
         broken: {
-            invoke: {
-                id: 'isBroken',
-                src: 'isBroken'
-            },
-            on: {
-                FIX: 'off',
-            }
+            id: 'broken',
+            type: 'final'
         },
     }
 }

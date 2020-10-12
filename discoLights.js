@@ -1,13 +1,29 @@
 const { Machine, interpret } = require('xstate')
 
-const { config, implementation } = require('./machines/disco')
+const { config, implementation } = require('./machine/disco-server')
 
 const discoLights = Machine(config, implementation)
 
-const { isOff } = interpret(discoLights)
+const disco = interpret(discoLights)
 
 isOff.onTransition(state => {
     console.log('state.toStrings()')
 })
 
-isOff.start()
+isOn.onTransition(state => {
+    console.log('state.toStrings()')
+})
+
+setColor.onTransition(state => {
+    console.log('state.toStrings()')
+})
+
+setSpeed.onTransition(state => {
+    console.log('state.toStrings()')
+})
+
+setLightMode.onTransition(state => {
+    console.log('state.toStrings()')
+})
+
+disco.start()
