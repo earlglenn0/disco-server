@@ -7,6 +7,7 @@ const discoImplementation = require('./discoImplementation')
 const { formatState } = require('./utils')
 
 io.on('connection', (socket) => {
+  console.log('user connected');
   const discoMachine = Machine(discoConfig, discoImplementation)
   const service = interpret(discoMachine)
   service.start()
