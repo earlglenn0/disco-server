@@ -1,5 +1,3 @@
-const { assign } = require('xstate')
-
 const discoConfig = {
   id: 'disco',
   initial: 'off',
@@ -17,7 +15,7 @@ const discoConfig = {
           },
           {
             target: 'on',
-            actions: assign({ clicks: context => context.clicks + 1 })
+            actions: 'incrementClick'
           }
         ]
       }
@@ -31,7 +29,7 @@ const discoConfig = {
               cond: 'hasReachedLimit'
             },
             {
-              actions: assign({ clicks: context => context.clicks + 1 }),
+              actions: 'incrementClick',
               target: 'off'
             }
           ]
@@ -49,7 +47,7 @@ const discoConfig = {
                     },
                     {
                       target: 'changing',
-                      actions: assign({ clicks: context => context.clicks + 1 }),
+                      actions: 'incrementClick',
                     }
                   ],
                 }
@@ -63,7 +61,7 @@ const discoConfig = {
                     },
                     {
                       target: 'steady',
-                      actions: assign({ clicks: context => context.clicks + 1 }),
+                      actions: 'incrementClick',
                     }
                   ]
                 }
@@ -82,7 +80,7 @@ const discoConfig = {
                     },
                     {
                       target: 'medium',
-                      actions: assign({ clicks: context => context.clicks + 1 }),
+                      actions: 'incrementClick',
                     }
                   ],
                   SET_SPEED_TO_HIGH: [
@@ -92,7 +90,7 @@ const discoConfig = {
                     },
                     {
                       target: 'high',
-                      actions: assign({ clicks: context => context.clicks + 1 }),
+                      actions: 'incrementClick',
                     }
                   ]
                 }
@@ -106,7 +104,7 @@ const discoConfig = {
                     },
                     {
                       target: 'low',
-                      actions: assign({ clicks: context => context.clicks + 1 })
+                      actions: 'incrementClick'
                     }
                   ],
                   SET_SPEED_TO_HIGH: [
@@ -116,7 +114,7 @@ const discoConfig = {
                     },
                     {
                       target: 'high',
-                      actions: assign({ clicks: context => context.clicks + 1 }),
+                      actions: 'incrementClick',
                     }
                   ]
                 }
@@ -130,7 +128,7 @@ const discoConfig = {
                     },
                     {
                       target: 'low',
-                      actions: assign({ clicks: context => context.clicks + 1 }),
+                      actions: 'incrementClick',
                     }
                   ],
                   SET_SPEED_TO_MEDIUM: [
@@ -140,7 +138,7 @@ const discoConfig = {
                     },
                     {
                       target: 'medium',
-                      actions: assign({ clicks: context => context.clicks + 1 })
+                      actions: 'incrementClick'
                     }
                   ]
                 }
@@ -159,7 +157,7 @@ const discoConfig = {
                       },
                       {
                         target: 'flashing',
-                        actions: assign({ clicks: context => context.clicks + 1 })
+                        actions: 'incrementClick'
                       }
                     ],
                   }
@@ -173,7 +171,7 @@ const discoConfig = {
                       },
                       {
                         target: 'steady',
-                        actions: assign({ clicks: context => context.clicks + 1 }),
+                        actions: 'incrementClick',
                       }
                     ],
                   }
