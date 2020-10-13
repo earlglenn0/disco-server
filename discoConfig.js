@@ -9,14 +9,8 @@ const discoConfig = {
     off: {
       on: {
         TURN_ON: [
-          {
-            target: '#broken',
-            cond: 'hasReachedLimit'
-          },
-          {
-            target: 'on',
-            actions: 'incrementClick'
-          }
+          { target: '#broken', cond: 'hasReachedLimit' },
+          { target: 'on', actions: 'incrementClick' }
         ]
       }
     },
@@ -24,14 +18,8 @@ const discoConfig = {
       type: 'parallel',
         on: {
           TURN_OFF: [
-            {
-              target: '#broken',
-              cond: 'hasReachedLimit'
-            },
-            {
-              actions: 'incrementClick',
-              target: 'off'
-            }
+            { target: '#broken', cond: 'hasReachedLimit' },
+            { actions: 'incrementClick', target: 'off' }
           ]
         },
         states: {
@@ -41,28 +29,16 @@ const discoConfig = {
               steady: {
                 on: {
                   SET_COLOR_TO_CHANGING: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'changing',
-                      actions: 'incrementClick',
-                    }
+                    { target: '#broken', cond: 'hasReachedLimit', },
+                    { target: 'changing', actions: 'incrementClick', }
                   ],
                 }
               },
               changing: {
                 on: {
                   SET_COLOR_TO_STEADY: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'steady',
-                      actions: 'incrementClick',
-                    }
+                    { target: '#broken', cond: 'hasReachedLimit' },
+                    { target: 'steady', actions: 'incrementClick' }
                   ]
                 }
               }
@@ -74,72 +50,36 @@ const discoConfig = {
               low: {
                 on: {
                   SET_SPEED_TO_MEDIUM: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'medium',
-                      actions: 'incrementClick',
-                    }
+                    { target: '#broken', cond: 'hasReachedLimit' },
+                    { target: 'medium', actions: 'incrementClick' }
                   ],
                   SET_SPEED_TO_HIGH: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'high',
-                      actions: 'incrementClick',
-                    }
+                    { target: '#broken',  cond: 'hasReachedLimit' },
+                    { target: 'high', actions: 'incrementClick' }
                   ]
                 }
               },
               medium: {
                 on: {
                   SET_SPEED_TO_LOW: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'low',
-                      actions: 'incrementClick'
-                    }
+                    { target: '#broken', cond: 'hasReachedLimit' },
+                    { target: 'low', actions: 'incrementClick' }
                   ],
                   SET_SPEED_TO_HIGH: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'high',
-                      actions: 'incrementClick',
-                    }
+                    { target: '#broken', cond: 'hasReachedLimit' },
+                    { target: 'high', actions: 'incrementClick' }
                   ]
                 }
               },
               high: {
                 on: {
                   SET_SPEED_TO_LOW: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'low',
-                      actions: 'incrementClick',
-                    }
+                    { target: '#broken', cond: 'hasReachedLimit' },
+                    { target: 'low', actions: 'incrementClick' }
                   ],
                   SET_SPEED_TO_MEDIUM: [
-                    {
-                      target: '#broken',
-                      cond: 'hasReachedLimit',
-                    },
-                    {
-                      target: 'medium',
-                      actions: 'incrementClick'
-                    }
+                    { target: '#broken', cond: 'hasReachedLimit' },
+                    { target: 'medium', actions: 'incrementClick' }
                   ]
                 }
               }
@@ -151,28 +91,16 @@ const discoConfig = {
                 steady: {
                   on: {
                     SET_LIGHTMODE_TO_FLASHING: [
-                      {
-                        target: '#broken',
-                        cond: 'hasReachedLimit',
-                      },
-                      {
-                        target: 'flashing',
-                        actions: 'incrementClick'
-                      }
+                      { target: '#broken', cond: 'hasReachedLimit' },
+                      { target: 'flashing',  actions: 'incrementClick' }
                     ],
                   }
                 },
                 flashing: {
                   on: {
                     SET_LIGHTMODE_TO_STEADY: [
-                      {
-                        target: '#broken',
-                        cond: 'hasReachedLimit',
-                      },
-                      {
-                        target: 'steady',
-                        actions: 'incrementClick',
-                      }
+                      { target: '#broken', cond: 'hasReachedLimit' },
+                      { target: 'steady', actions: 'incrementClick' }
                     ],
                   }
                 },
