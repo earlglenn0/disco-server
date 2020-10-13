@@ -1,11 +1,13 @@
 const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
-const { interpret } = require('xstate')
-const discoMachine = require('./discoMachine')
+const { Machine, interpret } = require('xstate')
+const discoConfig = require('./discoConfig')
+const discoImplementation = require('./discoImplementation')
 const { formatState } = require('./utils')
 
 io.on('connection', (socket) => {
+  const discoMachine = Machine(discoConfig, discoImplementation)
   const service = interpret(discoMachine)
   service.start()
   service.onTransition(state => {
