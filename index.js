@@ -16,35 +16,37 @@ const events = [
   'SET_LIGHTMODE_TO_STEADY', 'SET_LIGHTMODE_TO_FLASHING'
 ]
 
+const produceEvent = (topic, payload) => {
+  const payloads = [{
+    topic,
+    messages: [ payload]
+  }]
+  producer.send(payloads, (err, data) => {
+    if (err) {
+      console.log('producer failed')
+    } else {
+      console.log('producer succeeded')
+    }
+  })
+}
+
 producer.on('ready', () => {
   console.log('producer ready')
   io.on('connection', (socket) => {
     console.log('user connected')
     events.forEach(event => {
       socket.on(event, () => {
-        const payloads = [
-          {
-            topic: config.kafka_topic_produce,
-            messages: [event]
-          }
-        ]
-        producer.send(payloads, (err, data) => {
-          if (err) {
-            console.log('producer failed: ', event)
-          } else {
-            console.log('producer succeeded: ', event)
-          }
-        })
+        produceEvent(config.kafka_topic_produce, event)
       })
-    })
-    consumer.on('message', (message) => {
-      console.log({ message })
-      io.emit('STATE_CHANGED', JSON.parse(message.value))
     })
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
   })
+})
+consumer.on('message', (message) => {
+  console.log({ message })
+  io.emit('STATE_CHANGED', JSON.parse(message.value))
 })
 
 http.listen(3001, () => {
