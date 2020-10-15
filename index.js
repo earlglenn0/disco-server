@@ -7,7 +7,13 @@ const Producer = kafka.Producer
 const client = new kafka.KafkaClient(config.kafka_server)
 const producer = new Producer(client)
 const Consumer = kafka.Consumer
-const consumer = new Consumer(client, [{ topic: config.kafka_topic_consume, partition: 0 }], { autoCommit: false })
+const consumer = new Consumer(client, [{ topic: config.kafka_topic_consume, partition: 0 }], {
+  autoCommit: true,
+  fetchMaxWaitMs: 1000,
+  fetchMaxBytes: 1024 * 1024,
+  encoding: 'utf8',
+  fromOffset: false
+})
 
 const events = [
   'TURN_ON', 'TURN_OFF',
@@ -16,39 +22,40 @@ const events = [
   'SET_LIGHTMODE_TO_STEADY', 'SET_LIGHTMODE_TO_FLASHING'
 ]
 
-const produceEvent = (topic, payload) => {
-  const payloads = [{
-    topic,
-    messages: [ payload]
-  }]
-  producer.send(payloads, (err, data) => {
-    if (err) {
-      console.log('producer failed')
-    } else {
-      console.log('producer succeeded')
-    }
-  })
-}
-
-producer.on('ready', () => {
-  console.log('producer ready')
-  io.on('connection', (socket) => {
-    console.log('user connected')
-    events.forEach(event => {
-      socket.on(event, () => {
-        produceEvent(config.kafka_topic_produce, event)
-      })
-    })
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-  })
-})
-consumer.on('message', (message) => {
-  console.log({ message })
-  io.emit('STATE_CHANGED', JSON.parse(message.value))
-})
-
 http.listen(3001, () => {
   console.log('listening on *:3001');
+
+  const produceEvent = (topic, payload) => {
+    const payloads = [{
+      topic,
+      messages: [ payload]
+    }]
+    producer.send(payloads, (err, data) => {
+      if (err) {
+        console.log('producer failed')
+      } else {
+        console.log('producer succeeded')
+      }
+    })
+  }
+  
+  producer.on('ready', () => {
+    console.log('producer ready')
+    io.on('connection', (socket) => {
+      console.log('user connected')
+      events.forEach(event => {
+        socket.on(event, () => {
+          produceEvent(config.kafka_topic_produce, event)
+        })
+      })
+      socket.on('disconnect', () => {
+        console.log('user disconnected');
+      });
+    })
+    consumer.on('message', (message) => {
+      console.log({ message })
+      io.emit('STATE_CHANGED', JSON.parse(message.value))
+    })
+  })
+  
 });
