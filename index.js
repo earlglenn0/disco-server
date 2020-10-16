@@ -1,4 +1,4 @@
-const { PORT = 3000 } = process.env
+const { PORT = 3001 } = process.env
 
 const app = require('express')()
 const http = require('http').createServer(app)
