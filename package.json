@@ -12,7 +12,6 @@
   "dependencies": {
     "express": "^4.15.2",
     "kafka-node": "^5.0.0",
-    "kafkajs": "^1.14.0",
     "lodash": "^4.17.20",
     "socket.io": "^2.3.0",
     "xstate": "^4.13.0"
