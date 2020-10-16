@@ -1,3 +1,5 @@
+const { PORT = 3000 } = process.env
+
 const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
@@ -22,8 +24,8 @@ const events = [
   'SET_LIGHTMODE_TO_STEADY', 'SET_LIGHTMODE_TO_FLASHING'
 ]
 
-http.listen(3001, () => {
-  console.log('listening on *:3001');
+http.listen(PORT, () => {
+  console.log(`listening on *:${PORT}`);
 
   const produceEvent = (topic, payload) => {
     const payloads = [{
