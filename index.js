@@ -45,6 +45,7 @@ http.listen(3001, () => {
       console.log('user connected')
       events.forEach(event => {
         socket.on(event, () => {
+          console.log('event: ', event)
           produceEvent(config.kafka_topic_produce, event)
         })
       })
