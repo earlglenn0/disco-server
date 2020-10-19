@@ -5,7 +5,7 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const config = require('./config')
 const kafka = require('kafka-node')
-const Producer = kafka.Producer
+const Producer = kafka.HighLevelProducer
 const client = new kafka.KafkaClient(config.kafka_server)
 const producer = new Producer(client)
 const Consumer = kafka.Consumer
@@ -42,6 +42,9 @@ http.listen(PORT, () => {
   }
   
   producer.on('ready', () => {
+    producer.createTopics(['machine-changes', 'machine-input'], false, (err, data) => {
+      console.log({ data })
+    })
     console.log('producer ready')
     io.on('connection', (socket) => {
       console.log('user connected')
